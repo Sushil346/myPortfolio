@@ -17,6 +17,76 @@ navMenu.querySelectorAll('a').forEach((link) => {
   });
 });
 
+const scrollLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
+
+function focusSection(target) {
+  if (!target) return;
+  target.classList.remove('section-focus');
+  target.offsetHeight; // force reflow to restart animation
+  target.classList.add('section-focus');
+  setTimeout(() => target.classList.remove('section-focus'), 650);
+}
+
+function smoothScrollTo(targetId) {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  focusSection(el);
+}
+
+scrollLinks.forEach((link) => {
+  link.addEventListener('click', (e) => {
+    const hash = link.getAttribute('href');
+    const targetId = hash && hash.slice(1);
+    if (!targetId) return;
+    e.preventDefault();
+    smoothScrollTo(targetId);
+  });
+});
+
+window.addEventListener('load', () => {
+  if (location.hash && location.hash.length > 1) {
+    smoothScrollTo(location.hash.slice(1));
+  }
+});
+
+const sideNav = document.querySelector('.side-nav');
+const sideLinks = sideNav ? Array.from(sideNav.querySelectorAll('a')) : [];
+const observedIds = sideLinks.map((link) => link.getAttribute('href')?.replace('#', '')).filter(Boolean);
+const sectionVisibility = new Map(observedIds.map((id) => [id, false]));
+
+function setSideActive(id) {
+  sideLinks.forEach((link) => {
+    const linkId = link.getAttribute('href')?.replace('#', '');
+    link.classList.toggle('active', linkId === id);
+  });
+}
+
+if (sideNav && observedIds.length) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+      if (visibleEntries.length) {
+        visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        setSideActive(visibleEntries[0].target.id);
+      }
+
+      entries.forEach((entry) => {
+        sectionVisibility.set(entry.target.id, entry.isIntersecting);
+      });
+
+      const anyVisible = Array.from(sectionVisibility.values()).some(Boolean);
+      sideNav.classList.toggle('visible', anyVisible);
+    },
+    { threshold: 0.38 }
+  );
+
+  observedIds.forEach((id) => {
+    const section = document.getElementById(id);
+    if (section) observer.observe(section);
+  });
+}
+
 const neuralCanvas = document.getElementById('neural-network');
 const experienceCanvas = document.getElementById('experience-network');
 
