@@ -12,6 +12,7 @@
 </head>
 <body>
   <div class="bg-grid"></div>
+  <div class="top-fade"></div>
   <header class="top-nav">
     <div class="logo">Damodar<span>Bagale</span></div>
     <nav id="nav-menu">
@@ -39,16 +40,15 @@
         <p class="lead">I blend engineering discipline with a passion for data-driven problem solving. From building intelligent models to crafting clean code, I love turning ideas into high-impact solutions.</p>
         <div class="hero__actions">
           <a class="cta primary" href="#projects">View Projects</a>
-          <a class="cta ghost" href="https://www.linkedin.com/in/damodarbagaleofficial/" target="_blank" rel="noreferrer">Connect on LinkedIn</a>
-        </div>
-        <div class="hero__meta">
-          <div class="meta-item"><i class="fa-solid fa-location-dot"></i>Kathmandu, Nepal</div>
-          <div class="meta-item"><i class="fa-solid fa-envelope"></i><a href="mailto:bagalesushil37@gmail.com">bagalesushil37@gmail.com</a></div>
+          <a class="cta ghost linkedin" href="https://www.linkedin.com/in/damodarbagaleofficial/" target="_blank" rel="noreferrer">
+            <span>Connect on LinkedIn</span>
+            <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+          </a>
         </div>
       </div>
       <div class="hero__card">
         <div class="accent"></div>
-        <div class="badge">AI/ML Enthusiast</div>
+        <div class="badge"></div>
         <div class="hero__visual" aria-hidden="true">
           <canvas id="neural-network"></canvas>
         </div>
@@ -67,10 +67,6 @@
             <h3>Deep Learning &amp; NLP</h3>
             <p class="desc">Diving deeper into neural networks and language understanding.</p>
           </div>
-        </div>
-        <div class="social">
-          <a href="https://github.com/Sushil346" aria-label="GitHub" target="_blank" rel="noreferrer"><i class="fa-brands fa-github"></i></a>
-          <a href="https://www.linkedin.com/in/damodarbagaleofficial/" aria-label="LinkedIn" target="_blank" rel="noreferrer"><i class="fa-brands fa-linkedin"></i></a>
         </div>
       </div>
     </section>
@@ -175,32 +171,39 @@
         <p class="kicker">Experience</p>
         <h2>Learning by Doing</h2>
       </div>
-      <div class="experience-grid">
-        <article class="xp-card">
-          <h3>Nobel Internship</h3>
-          <p class="meta">Internship</p>
-          <p>Hands-on exposure to practical projects and collaborative problem solving.</p>
-        </article>
-        <article class="xp-card">
-          <h3>Hack the Code Challenge</h3>
-          <p class="meta">Coding Challenge</p>
-          <p>Built quick solutions under pressure while keeping code clean and well-documented.</p>
-        </article>
-        <article class="xp-card">
-          <h3>UNESCO Youth Hackathon</h3>
-          <p class="meta">Global Hackathon</p>
-          <p>Collaborated with teammates to prototype ideas that address real-world community needs.</p>
-        </article>
-        <article class="xp-card">
-          <h3>IEEE 2025 Extreme Coding Challenge</h3>
-          <p class="meta">Coding Marathon</p>
-          <p>Balanced speed and accuracy in algorithmic problem-solving rounds.</p>
-        </article>
-        <article class="xp-card">
-          <h3>Codefest 2025</h3>
-          <p class="meta">Tech Fest</p>
-          <p>Showcased projects and refined presentation skills with peer feedback.</p>
-        </article>
+      <div class="experience-visual">
+        <canvas id="experience-network" aria-hidden="true"></canvas>
+        <div class="experience-grid">
+          <div class="xp-row xp-row--top">
+            <article class="xp-card">
+              <h3>Nobel Internship</h3>
+              <p class="meta">Internship</p>
+              <p>Hands-on exposure to practical projects and collaborative problem solving.</p>
+            </article>
+            <article class="xp-card">
+              <h3>Hack the Code Challenge</h3>
+              <p class="meta">Coding Challenge</p>
+              <p>Built quick solutions under pressure while keeping code clean and well-documented.</p>
+            </article>
+            <article class="xp-card">
+              <h3>UNESCO Youth Hackathon</h3>
+              <p class="meta">Global Hackathon</p>
+              <p>Collaborated with teammates to prototype ideas that addresses Media & Information Literacy.</p>
+            </article>
+          </div>
+          <div class="xp-row xp-row--bottom">
+            <article class="xp-card">
+              <h3>IEEE 2025 Extreme Coding Challenge</h3>
+              <p class="meta">Coding Marathon</p>
+              <p>Balanced speed and accuracy in algorithmic problem-solving rounds.</p>
+            </article>
+            <article class="xp-card">
+              <h3>Codefest 2025</h3>
+              <p class="meta">Tech Fest</p>
+              <p>Showcased projects and refined presentation skills with peer feedback.</p>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -211,12 +214,22 @@
       </div>
       <div class="cert-grid">
         <article class="cert">
-          <h3>Supervised Machine Learning: Regression &amp; Classification</h3>
+          <div class="cert__header">
+            <h3>Supervised Machine Learning: Regression &amp; Classification</h3>
+            <a class="credential-link" href="https://www.coursera.org/account/accomplishments/verify/1Y0KR8W01AUK" target="_blank" rel="noreferrer">
+              View Credential <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
           <p class="meta">Coursera</p>
           <p>Gained hands-on experience in building ML models and applying algorithms to real-world datasets.</p>
         </article>
         <article class="cert">
-          <h3>Data Analysis with Python</h3>
+          <div class="cert__header">
+            <h3>Data Analysis with Python</h3>
+            <a class="credential-link" href="https://www.freecodecamp.org/certification/Damodar_Bagale/data-analysis-with-python-v7" target="_blank" rel="noreferrer">
+              View Credential <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
           <p class="meta">FreeCodeCamp</p>
           <p>Mastered data manipulation, visualization, and insights generation using Python libraries.</p>
         </article>

@@ -18,6 +18,7 @@ navMenu.querySelectorAll('a').forEach((link) => {
 });
 
 const neuralCanvas = document.getElementById('neural-network');
+const experienceCanvas = document.getElementById('experience-network');
 
 if (neuralCanvas) {
   const ctx = neuralCanvas.getContext('2d');
@@ -338,4 +339,140 @@ if (neuralCanvas) {
   init();
   window.addEventListener('resize', resizeCanvas);
   neuralCanvas.addEventListener('click', init);
+}
+
+function createSoftNetwork(canvas, overrides = {}) {
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  const cfg = {
+    density: 0.00012,
+    speed: 0.22,
+    connectDist: 140,
+    sparkChance: 0.015,
+    sparkSpeed: 1.2,
+    sparkLength: 24,
+    lineColor: 'rgba(124, 108, 242, 0.28)',
+    pointColor: 'rgba(94, 234, 212, 0.7)',
+    sparkColor: 'rgba(124, 180, 242, 0.9)',
+    ...overrides
+  };
+
+  let width = 0;
+  let height = 0;
+  let nodes = [];
+  let sparks = [];
+
+  const alphaColor = (color, alpha) => color.replace(/[\d.]+\)$/, `${alpha})`);
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    width = rect.width;
+    height = rect.height;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    initNodes();
+  }
+
+  function initNodes() {
+    const count = Math.max(14, Math.floor(width * height * cfg.density));
+    nodes = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * cfg.speed,
+      vy: (Math.random() - 0.5) * cfg.speed,
+      pulse: Math.random() * Math.PI * 2
+    }));
+    sparks = [];
+  }
+
+  function updateNodes() {
+    for (const n of nodes) {
+      n.x += n.vx;
+      n.y += n.vy;
+      n.pulse += 0.015;
+      if (n.x < -20) n.x = width + 20;
+      if (n.x > width + 20) n.x = -20;
+      if (n.y < -20) n.y = height + 20;
+      if (n.y > height + 20) n.y = -20;
+    }
+  }
+
+  function updateSparks() {
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      sparks[i].t += cfg.sparkSpeed * 0.016;
+      if (sparks[i].t >= 1) sparks.splice(i, 1);
+    }
+  }
+
+  function spawnSparks(pairs) {
+    if (pairs.length && Math.random() < cfg.sparkChance) {
+      const pair = pairs[(Math.random() * pairs.length) | 0];
+      sparks.push({ a: pair[0], b: pair[1], t: 0 });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    const pairs = [];
+
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i];
+        const b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < cfg.connectDist) {
+          const alpha = 0.08 + (1 - dist / cfg.connectDist) * 0.22;
+          ctx.strokeStyle = alphaColor(cfg.lineColor, alpha.toFixed(3));
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+          pairs.push([a, b]);
+        }
+      }
+    }
+
+    spawnSparks(pairs);
+
+    for (const s of sparks) {
+      const x = s.a.x + (s.b.x - s.a.x) * s.t;
+      const y = s.a.y + (s.b.y - s.a.y) * s.t;
+      const tx = s.a.x + (s.b.x - s.a.x) * Math.max(0, s.t - cfg.sparkLength / cfg.connectDist);
+      const ty = s.a.y + (s.b.y - s.a.y) * Math.max(0, s.t - cfg.sparkLength / cfg.connectDist);
+      ctx.strokeStyle = cfg.sparkColor;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(tx, ty);
+      ctx.stroke();
+    }
+
+    for (const n of nodes) {
+      const r = 1.6 + Math.sin(n.pulse) * 0.4;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = cfg.pointColor;
+      ctx.fill();
+    }
+  }
+
+  function loop() {
+    updateNodes();
+    updateSparks();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  loop();
+}
+
+if (experienceCanvas) {
+  createSoftNetwork(experienceCanvas);
 }
